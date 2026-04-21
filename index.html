@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Happy Birthday, Princy 🌸</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Raleway:wght@200;300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--rose:#e8a0b0;--deep-rose:#c0556d;--blush:#fce8ee;--cream:#fdf6f0;--gold:#c9a96e;--dark:#2a1a20;--text:#4a2a35;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--cream);color:var(--text);font-family:'Raleway',sans-serif;overflow-x:hidden;}
+
+/* ANIMATIONS */
+@keyframes fall{0%{transform:translateY(0) rotate(0deg) scale(1);opacity:0;}5%{opacity:0.8;}95%{opacity:0.6;}100%{transform:translateY(110vh) rotate(540deg) scale(0.6);opacity:0;}}
+@keyframes floatCrown{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
+@keyframes ringPulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.06);opacity:0.7;}}
+@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.2);}}
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes cardFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+@keyframes glowPulse{0%,100%{box-shadow:0 0 20px #e8a0b030;}50%{box-shadow:0 0 50px #e8a0b060;}}
+
+/* PETALS */
+.petal-canvas{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.petal{position:absolute;top:-60px;width:18px;height:24px;background:radial-gradient(ellipse at 40% 30%,#f9c8d8,#e07090aa);border-radius:50% 0 50% 0;opacity:0;animation:fall linear infinite;filter:drop-shadow(0 2px 4px #e0708040);}
+
+/* ══ SPLASH ══ */
+#splash{position:fixed;inset:0;z-index:9999;background:linear-gradient(160deg,#2a1a20 0%,#3d1a28 50%,#1a0a10 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;cursor:pointer;transition:opacity 1.2s ease,visibility 1.2s ease;padding:2rem;}
+#splash.hide{opacity:0;visibility:hidden;pointer-events:none;}
+.splash-petals{position:absolute;inset:0;overflow:hidden;pointer-events:none;}
+.splash-petal{position:absolute;top:-40px;width:14px;height:20px;background:radial-gradient(ellipse at 40% 30%,#f9c8d8,#e07090aa);border-radius:50% 0 50% 0;animation:fall linear infinite;}
+.splash-ring{width:160px;height:160px;border-radius:50%;border:1px solid #e8a0b030;display:flex;align-items:center;justify-content:center;position:relative;margin-bottom:2.5rem;animation:ringPulse 2.5s ease-in-out infinite;}
+.splash-ring::before{content:'';position:absolute;inset:-12px;border-radius:50%;border:1px solid #e8a0b018;animation:ringPulse 2.5s 0.4s ease-in-out infinite;}
+.splash-ring::after{content:'';position:absolute;inset:-24px;border-radius:50%;border:1px solid #e8a0b010;animation:ringPulse 2.5s 0.8s ease-in-out infinite;}
+.splash-icon{font-size:4.5rem;animation:floatCrown 3s ease-in-out infinite;}
+.splash-for{font-family:'Raleway',sans-serif;font-weight:200;letter-spacing:0.55em;font-size:0.72rem;text-transform:uppercase;color:var(--rose);margin-bottom:0.5rem;}
+.splash-name{font-family:'Cormorant Garamond',serif;font-size:clamp(3.5rem,12vw,7rem);font-weight:300;color:#fce8ee;line-height:1;margin-bottom:0.5rem;}
+.splash-name em{color:var(--rose);font-style:italic;}
+.splash-date{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);font-size:1.1rem;margin-bottom:3rem;}
+.splash-btn{display:flex;align-items:center;gap:0.8rem;padding:1rem 2.8rem;border:1px solid var(--rose);border-radius:50px;background:transparent;color:#fce8ee;font-family:'Raleway',sans-serif;font-size:0.78rem;letter-spacing:0.35em;text-transform:uppercase;cursor:pointer;transition:background 0.3s,box-shadow 0.3s,transform 0.2s;animation:fadeUp 1s 0.5s ease both;}
+.splash-btn:hover{background:#e8a0b018;box-shadow:0 0 40px #e8a0b040;transform:scale(1.04);}
+.splash-hint{position:absolute;bottom:2rem;font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:#ffffff30;}
+
+/* ══ VIDEO MODAL ══ */
+#video-modal{position:fixed;inset:0;z-index:8888;background:#000000f2;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity 0.8s ease,visibility 0.8s ease;padding:1.5rem;}
+#video-modal.open{opacity:1;visibility:visible;}
+.modal-label{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--rose);font-size:1.15rem;letter-spacing:0.15em;margin-bottom:1.4rem;text-align:center;animation:fadeUp 0.7s ease both;}
+.modal-video-wrap{position:relative;width:100%;max-width:840px;border-radius:12px;overflow:hidden;box-shadow:0 20px 80px #c0556d50;border:1px solid #e8a0b030;animation:fadeUp 0.7s 0.15s ease both;animation:glowPulse 3s ease-in-out infinite;}
+.modal-video-wrap video{width:100%;display:block;background:#000;}
+.modal-skip{margin-top:1.8rem;background:none;border:1px solid #ffffff25;color:#ffffff70;font-family:'Raleway',sans-serif;font-size:0.7rem;letter-spacing:0.3em;text-transform:uppercase;padding:0.55rem 1.6rem;border-radius:50px;cursor:pointer;transition:all 0.25s;}
+.modal-skip:hover{border-color:var(--rose);color:var(--rose);}
+
+/* ══ HERO ══ */
+#hero{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:linear-gradient(160deg,#fce8ee 0%,#fdf6f0 50%,#fce0ea 100%);padding:3rem 2rem;overflow:hidden;}
+#hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,#f9c8d840 0%,transparent 70%);pointer-events:none;}
+.crown{font-size:3.5rem;animation:floatCrown 3s ease-in-out infinite;margin-bottom:0.5rem;}
+.hero-subtitle{font-family:'Raleway',sans-serif;font-weight:200;letter-spacing:0.5em;font-size:0.8rem;color:var(--deep-rose);text-transform:uppercase;margin-bottom:1rem;animation:fadeUp 1s ease both;}
+.hero-name{font-family:'Cormorant Garamond',serif;font-size:clamp(4rem,12vw,9rem);font-weight:300;color:var(--dark);line-height:1;animation:fadeUp 1s 0.2s ease both;}
+.hero-name span{color:var(--deep-rose);font-style:italic;}
+.hero-tagline{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1.1rem,3vw,1.6rem);color:var(--gold);margin:1.2rem 0 2.5rem;animation:fadeUp 1s 0.4s ease both;}
+.divider{width:120px;height:1px;background:linear-gradient(to right,transparent,var(--rose),transparent);margin:0 auto 2.5rem;animation:fadeUp 1s 0.5s ease both;}
+.hero-message{max-width:520px;font-size:0.95rem;font-weight:300;line-height:2;color:var(--text);opacity:0.85;animation:fadeUp 1s 0.6s ease both;}
+.scroll-hint{position:absolute;bottom:2rem;font-size:0.7rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--rose);animation:bounce 2s ease-in-out infinite;}
+
+/* SECTIONS */
+section{position:relative;z-index:1;padding:6rem 2rem;text-align:center;}
+.section-label{font-family:'Raleway',sans-serif;font-weight:200;letter-spacing:0.45em;font-size:0.72rem;text-transform:uppercase;color:var(--deep-rose);margin-bottom:0.6rem;}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:400;color:var(--dark);margin-bottom:1rem;}
+.section-title em{color:var(--deep-rose);}
+
+/* ══ QUOTES ══ */
+#quotes{background:linear-gradient(160deg,#fdf6f0 0%,#fce8ee 100%);}
+.quotes-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;max-width:1100px;margin:3rem auto 0;}
+.quote-card{background:#fff;border:1px solid #f0c0cc;border-radius:10px;padding:2.2rem 1.8rem;position:relative;box-shadow:0 4px 24px #c0556d08;text-align:left;transition:transform 0.4s ease,box-shadow 0.4s ease;animation:cardFloat 5s ease-in-out infinite;}
+.quote-card:nth-child(2){animation-delay:0.9s;}
+.quote-card:nth-child(3){animation-delay:1.8s;}
+.quote-card:nth-child(4){animation-delay:2.7s;}
+.quote-card:nth-child(5){animation-delay:3.6s;}
+.quote-card:nth-child(6){animation-delay:4.5s;}
+.quote-card:hover{transform:translateY(-8px) scale(1.01);box-shadow:0 16px 40px #c0556d18;}
+.quote-mark{font-family:'Cormorant Garamond',serif;font-size:4rem;color:var(--rose);line-height:0.6;margin-bottom:0.8rem;display:block;}
+.quote-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;line-height:1.85;color:var(--text);margin-bottom:1rem;}
+.quote-author{font-size:0.68rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--deep-rose);}
+.quote-emoji{position:absolute;top:1.2rem;right:1.4rem;font-size:1.4rem;}
+
+/* ══ WISHES ══ */
+#wishes{background:linear-gradient(160deg,#2a1a20,#3d1a28);}
+#wishes .section-label{color:var(--rose);}
+#wishes .section-title{color:#fce8ee;}
+#wishes .section-title em{color:var(--rose);}
+.wishes-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;max-width:1100px;margin:3rem auto 0;}
+.wish-card{background:#ffffff06;border:1px solid #e8a0b018;border-radius:10px;padding:2rem 1.8rem;text-align:left;transition:background 0.3s,box-shadow 0.3s,transform 0.3s;position:relative;overflow:hidden;}
+.wish-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,var(--rose),transparent);}
+.wish-card:hover{background:#ffffff0d;box-shadow:0 12px 40px #00000040;transform:translateY(-4px);}
+.wish-number{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;color:var(--rose);opacity:0.2;position:absolute;top:1rem;right:1.5rem;line-height:1;}
+.wish-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:#fce8ee;margin-bottom:0.8rem;}
+.wish-body{font-size:0.87rem;font-weight:300;line-height:1.95;color:#fce8eecc;}
+.wish-emoji{font-size:1.6rem;margin-bottom:1rem;display:block;}
+.big-wish{max-width:740px;margin:4.5rem auto 0;background:#ffffff06;border:1px solid #e8a0b025;border-radius:14px;padding:3.5rem;text-align:center;position:relative;}
+.big-wish::before{content:'❝';position:absolute;top:-1.5rem;left:2rem;font-family:'Cormorant Garamond',serif;font-size:7rem;color:var(--rose);line-height:1;opacity:0.4;}
+.big-wish-text{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-style:italic;line-height:2.1;color:#fce8ee;}
+.big-wish-sign{margin-top:2rem;font-family:'Raleway',sans-serif;font-size:0.75rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--rose);}
+
+/* FOOTER */
+footer{text-align:center;padding:3rem 2rem;background:var(--dark);color:#ffffff40;font-size:0.75rem;letter-spacing:0.2em;position:relative;z-index:1;}
+footer .hearts{font-size:1.4rem;margin-bottom:0.5rem;animation:pulse 1.5s ease-in-out infinite;}
+
+/* LIGHTBOX */
+.lightbox{display:none;position:fixed;inset:0;z-index:1000;background:#00000088;backdrop-filter:blur(8px);align-items:center;justify-content:center;}
+.lightbox.open{display:flex;}
+.lightbox img{max-width:90vw;max-height:85vh;border-radius:6px;box-shadow:0 20px 60px #000000aa;}
+.lightbox-close{position:absolute;top:1.5rem;right:2rem;color:#fff;font-size:2rem;cursor:pointer;background:none;border:none;}
+</style>
+</head>
+<body>
+
+<div class="petal-canvas" id="petalCanvas"></div>
+
+<!-- ══ SPLASH ══ -->
+<div id="splash">
+  <div class="splash-petals" id="splashPetals"></div>
+  <div class="splash-ring"><div class="splash-icon">🌸</div></div>
+  <p class="splash-for">A birthday surprise for</p>
+  <h1 class="splash-name"><em>Princy</em></h1>
+  <p class="splash-date">With all the love in the world (haan meri jaan😎😎) 💕</p>
+  <button class="splash-btn" id="splash-btn">🎬 &nbsp; Open Your Surprise</button>
+  <p class="splash-hint">tap anywhere to enter</p>
+</div>
+
+<!-- ══ VIDEO MODAL ══ -->
+<div id="video-modal">
+  <p class="modal-label">✨ &nbsp; A special message just for you, Princy &nbsp; ✨</p>
+  <div class="modal-video-wrap">
+    <video id="modal-video" controls playsinline>
+      <source src="VN20260422_010310.mp4" type="video/mp4"/>
+    </video>
+  </div>
+  <button class="modal-skip" id="modal-skip">Continue to your birthday page ↓</button>
+</div>
+
+<!-- ══ HERO ══ -->
+<section id="hero">
+  <div class="crown">👑</div>
+  <p class="hero-subtitle">A birthday celebration for</p>
+  <h1 class="hero-name"><span>Princy</span></h1>
+  <p class="hero-tagline">A soul as beautiful as a rose in full bloom</p>
+  <div class="divider"></div>
+  <p class="hero-message">Today the universe pauses to celebrate the day you arrived and made everything a little warmer, a little brighter, and a whole lot more wonderful. Happy birthday, aapko hardik shubhkamnaye , sada suhagan reh😘😘. 🌸</p>
+  <p class="scroll-hint">↓ &nbsp; scroll to celebrate</p>
+</section>
+
+<!-- ══ QUOTES ══ -->
+<section id="quotes">
+  <p class="section-label">Words of Love(dekha kitna mehnat kara maine)</p>
+  <h2 class="section-title">Beautiful <em>Quotes</em> for You</h2>
+  <div class="quotes-grid">
+
+    <div class="quote-card">
+      <span class="quote-emoji">🌸</span>
+      <span class="quote-mark">"</span>
+      <p class="quote-text">She is clothed in strength and dignity, and she laughs without fear of the future.</p>
+      <p class="quote-author">— Proverbs 31:25</p>
+    </div>
+
+    <div class="quote-card">
+      <span class="quote-emoji">✨</span>
+      <span class="quote-mark">"</span>
+      <p class="quote-text">You are braver than you believe, stronger than you seem, and smarter than you think.</p>
+      <p class="quote-author">— A. A. Milne</p>
+    </div>
+
+    <div class="quote-card">
+      <span class="quote-emoji">💫</span>
+      <span class="quote-mark">"</span>
+      <p class="quote-text">The most beautiful thing a woman can wear is confidence — and you wear it effortlessly, Princy.</p>
+      <p class="quote-author">— From the heart</p>
+    </div>
+
+    <div class="quote-card">
+      <span class="quote-emoji">🌹</span>
+      <span class="quote-mark">"</span>
+      <p class="quote-text">She was a girl who knew how to be happy even when she was sad. And that's important.</p>
+      <p class="quote-author">— Marilyn Monroe</p>
+    </div>
+
+    <div class="quote-card">
+      <span class="quote-emoji">🦋</span>
+      <span class="quote-mark">"</span>
+      <p class="quote-text">She is not perfect, but she is always herself — wild, kind, radiant, and absolutely one of a kind.</p>
+      <p class="quote-author">— For you, always</p>
+    </div>
+
+    <div class="quote-card">
+      <span class="quote-emoji">💕</span>
+      <span class="quote-mark">"</span>
+      <p class="quote-text">You yourself, as much as anybody in the entire universe, deserve your love and affection.</p>
+      <p class="quote-author">— Buddha</p>
+    </div>
+
+    <div class="quote-card">
+      <span class="quote-emoji">🌙</span>
+      <span class="quote-mark">"</span>
+      <p class="quote-text">She has been through hell. So believe me when I say — fear her when she looks into a fire and smiles.</p>
+      <p class="quote-author">— E. Corona</p>
+    </div>
+
+    <div class="quote-card">
+      <span class="quote-emoji">🎀</span>
+      <span class="quote-mark">"</span>
+      <p class="quote-text">A strong woman looks a challenge dead in the eye and gives it a wink. That's you, Princy.</p>
+      <p class="quote-author">— From a best friend</p>
+    </div>
+
+    <div class="quote-card">
+      <span class="quote-emoji">⭐</span>
+      <span class="quote-mark">"</span>
+      <p class="quote-text">She remembered who she was and the game changed. Happy birthday to the girl who changes every game she enters.</p>
+      <p class="quote-author">— Lalah Delia</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ WISHES ══ -->
+<section id="wishes">
+  <p class="section-label">From the Heart</p>
+  <h2 class="section-title">Birthday <em>Wishes</em> for Princy</h2>
+  <div class="wishes-grid">
+
+    <div class="wish-card">
+      <span class="wish-emoji">🌸</span>
+      <span class="wish-number">01</span>
+      <h3 class="wish-title">May Joy Find You Every Day</h3>
+      <p class="wish-body">May every morning greet you with something to smile about — a warm cup of tea, a gentle breeze, or simply the reminder that you are so very loved.</p>
+    </div>
+
+    <div class="wish-card">
+      <span class="wish-emoji">🌟</span>
+      <span class="wish-number">02</span>
+      <h3 class="wish-title">May Your Dreams Come True</h3>
+      <p class="wish-body">Every dream you have tucked away in your heart — big or small — I hope this year brings them all one step closer to becoming your beautiful reality.</p>
+    </div>
+
+    <div class="wish-card">
+      <span class="wish-emoji">💪</span>
+      <span class="wish-number">03</span>
+      <h3 class="wish-title">May You Always Know Your Worth</h3>
+      <p class="wish-body">You are rare, remarkable, and irreplaceable. May you never doubt yourself — and on the days you do, may someone remind you just how extraordinary you truly are.</p>
+    </div>
+
+    <div class="wish-card">
+      <span class="wish-emoji">🌈</span>
+      <span class="wish-number">04</span>
+      <h3 class="wish-title">May Every Chapter Be Beautiful</h3>
+      <p class="wish-body">This new year of your life is a blank page. May every chapter be filled with adventure, laughter, love, and all the beautiful things you so deeply deserve.</p>
+    </div>
+
+    <div class="wish-card">
+      <span class="wish-emoji">🫂</span>
+      <span class="wish-number">05</span>
+      <h3 class="wish-title">May Love Surround You Always</h3>
+      <p class="wish-body">May you always be surrounded by people who celebrate you, uplift you, and love you fiercely — just the way you deserve to be loved, Princy.</p>
+    </div>
+
+    <div class="wish-card">
+      <span class="wish-emoji">🎯</span>
+      <span class="wish-number">06</span>
+      <h3 class="wish-title">May You Conquer Everything</h3>
+      <p class="wish-body">Whatever goals you set, mountains you face, or battles you fight — may you rise, shine, and conquer them all with your grace and unstoppable spirit.</p>
+    </div>
+
+    <div class="wish-card">
+      <span class="wish-emoji">🌺</span>
+      <span class="wish-number">07</span>
+      <h3 class="wish-title">May Health & Happiness Be Yours</h3>
+      <p class="wish-body">May your body be strong, your mind be at peace, and your spirit forever be free. You deserve every ounce of happiness the world has to offer.</p>
+    </div>
+
+    <div class="wish-card">
+      <span class="wish-emoji">🎂</span>
+      <span class="wish-number">08</span>
+      <h3 class="wish-title">May This Be Your Best Year Yet</h3>
+      <p class="wish-body">Out of all the years you've lived, may this one outshine them all. New blessings, new beginnings, new heights — all yours, beautiful Princy.</p>
+    </div>
+
+    <div class="wish-card">
+      <span class="wish-emoji">🕊️</span>
+      <span class="wish-number">09</span>
+      <h3 class="wish-title">May Peace Follow You Everywhere</h3>
+      <p class="wish-body">In every storm, may you find calm. In every darkness, may you find light. In every moment of doubt, may you find the courage within your beautiful heart.</p>
+    </div>
+
+  </div>
+
+  <div class="big-wish">
+    <p class="big-wish-text">Princy, there are no words big enough to describe how special you are.TU ALAG HAI RE ,PRINCY RE, You light up every room you walk into, TU SACHME BOHOT ACCHI HAI RE.. you make the world softer just by being in it. POORI DUNIYA KA BOJH TUJHPAR HAI RE...  On your birthday, I want you to know — you are celebrated, you are cherished, and you are endlessly loved. May this year be the most magical chapter of your beautiful story. Here's to you, dear soul, HAPPY BIRTHDAY RE , MERA PRINCU RE❤️😘. 🌸</p>
+    <p class="big-wish-sign">— With all the love in the universe &nbsp; 💕</p>
+  </div>
+</section>
+
+<footer>
+  <div class="hearts">🌸 💕 🌸</div>
+  <p>Made with love for <strong style="color:#e8a0b0;">Princy</strong> &nbsp;·&nbsp; Happy Birthday 🎂</p>
+</footer>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightbox-close">✕</button>
+  <img src="" alt="" id="lightbox-img"/>
+</div>
+
+<script>
+// ── SPLASH PETALS ──
+const splashPetals = document.getElementById('splashPetals');
+for (let i = 0; i < 20; i++) {
+  const p = document.createElement('div');
+  p.className = 'splash-petal';
+  p.style.left = Math.random() * 100 + 'vw';
+  p.style.animationDuration = (6 + Math.random() * 10) + 's';
+  p.style.animationDelay = (-Math.random() * 14) + 's';
+  p.style.opacity = 0.3 + Math.random() * 0.5;
+  splashPetals.appendChild(p);
+}
+
+// ── VIDEO MODAL ──
+const splash     = document.getElementById('splash');
+const videoModal = document.getElementById('video-modal');
+const modalVideo = document.getElementById('modal-video');
+const audio      = document.getElementById('audio-el');
+const playBtn    = document.getElementById('play-btn');
+const vinyl      = document.getElementById('vinyl');
+
+function openVideoModal() {
+  splash.classList.add('hide');
+  setTimeout(() => {
+    videoModal.classList.add('open');
+    modalVideo.play().catch(() => {});
+  }, 700);
+}
+
+function closeVideoModal() {
+  modalVideo.pause();
+  videoModal.style.transition = 'opacity 0.8s ease';
+  videoModal.style.opacity = '0';
+  setTimeout(() => {
+    videoModal.classList.remove('open');
+    videoModal.style.opacity = '';
+    if (audio.src && audio.src !== window.location.href) {
+      audio.play().then(() => { playBtn.textContent = '⏸'; vinyl.classList.add('spinning'); }).catch(() => {});
+    }
+  }, 800);
+}
+
+document.getElementById('splash-btn').addEventListener('click', e => { e.stopPropagation(); openVideoModal(); });
+splash.addEventListener('click', openVideoModal);
+document.getElementById('modal-skip').addEventListener('click', closeVideoModal);
+modalVideo.addEventListener('ended', closeVideoModal);
+
+// ── PAGE PETALS ──
+const canvas = document.getElementById('petalCanvas');
+for (let i = 0; i < 28; i++) {
+  const p = document.createElement('div');
+  p.className = 'petal';
+  p.style.left = Math.random() * 100 + 'vw';
+  p.style.animationDuration = (6 + Math.random() * 10) + 's';
+  p.style.animationDelay = (-Math.random() * 14) + 's';
+  p.style.width = (10 + Math.random() * 14) + 'px';
+  p.style.height = (14 + Math.random() * 18) + 'px';
+  p.style.opacity = 0.4 + Math.random() * 0.5;
+  canvas.appendChild(p);
+}
+
+// ── PHOTO GALLERY ──
+const captions = ['Pure Joy ✨','Best Smile 🌸','Shining Star 💫','Always Glowing 🌹','Pure Magic 🦋','Timeless Beauty 💕'];
+const gallery = document.getElementById('gallery');
+for (let i = 0; i < 6; i++) {
+  const slot = document.createElement('div');
+  slot.className = 'photo-slot';
+  slot.innerHTML = `<div class="placeholder-text"><span>🌸</span><p>Add Photo</p></div><div class="photo-caption">${captions[i]}</div><input type="file" accept="image/*"/>`;
+  const input = slot.querySelector('input');
+  input.addEventListener('change', e => {
+    const file = e.target.files[0]; if (!file) return;
+    const url = URL.createObjectURL(file);
+    const ph = slot.querySelector('.placeholder-text'); if (ph) ph.remove();
+    let img = slot.querySelector('img');
+    if (!img) { img = document.createElement('img'); slot.prepend(img); }
+    img.src = url; img.style.cursor = 'zoom-in';
+    img.onclick = () => openLightbox(url);
+  });
+  gallery.appendChild(slot);
+}
+
+// ── LIGHTBOX ──
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+function openLightbox(src) { lightboxImg.src = src; lightbox.classList.add('open'); }
+document.getElementById('lightbox-close').onclick = () => lightbox.classList.remove('open');
+lightbox.onclick = e => { if (e.target === lightbox) lightbox.classList.remove('open'); };
+
+// ── MUSIC PLAYER ──
+const progressFill  = document.getElementById('progress-fill');
+const progressBar   = document.getElementById('progress-bar');
+const currentTimeEl = document.getElementById('current-time');
+const durationEl    = document.getElementById('duration');
+const trackTitle    = document.getElementById('track-title');
+const trackArtist   = document.getElementById('track-artist');
+const musicInput    = document.getElementById('music-file-input');
+
+function fmt(t) { const m=Math.floor(t/60),s=Math.floor(t%60); return m+':'+String(s).padStart(2,'0'); }
+
+musicInput.addEventListener('change', e => {
+  const file = e.target.files[0]; if (!file) return;
+  audio.src = URL.createObjectURL(file);
+  trackTitle.textContent = file.name.replace(/\.[^.]+$/,'');
+  trackArtist.textContent = '♫  Now Playing';
+  audio.play().then(() => { playBtn.textContent='⏸'; vinyl.classList.add('spinning'); }).catch(()=>{});
+});
+
+playBtn.addEventListener('click', () => {
+  if (audio.paused) { audio.play(); playBtn.textContent='⏸'; vinyl.classList.add('spinning'); }
+  else { audio.pause(); playBtn.textContent='▶'; vinyl.classList.remove('spinning'); }
+});
+audio.addEventListener('timeupdate', () => {
+  if (!audio.duration) return;
+  progressFill.style.width = (audio.currentTime/audio.duration*100)+'%';
+  currentTimeEl.textContent = fmt(audio.currentTime);
+  durationEl.textContent = fmt(audio.duration);
+});
+audio.addEventListener('ended', () => { playBtn.textContent='▶'; vinyl.classList.remove('spinning'); });
+progressBar.addEventListener('click', e => {
+  if (!audio.duration) return;
+  const r = progressBar.getBoundingClientRect();
+  audio.currentTime = ((e.clientX-r.left)/r.width)*audio.duration;
+});
+document.getElementById('prev-btn').addEventListener('click', () => { audio.currentTime=0; });
+document.getElementById('next-btn').addEventListener('click', () => { audio.currentTime=Math.min(audio.currentTime+10,audio.duration||0); });
+</script>
+</body>
+</html>
